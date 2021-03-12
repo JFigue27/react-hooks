@@ -10,12 +10,11 @@ function App() {
   //   setDarkMode(!darkMode);
   // };
 
-  
   return (
     <div className="App">
       <header className={darkMode ? "AppDarkMode" : "App"}>
         <h1>Hola React Hooks</h1>
-        <Header onClick={() => setDarkMode(!darkMode)} darkmode={darkMode}/>
+        <Header onClick={() => setDarkMode(!darkMode)} darkmode={darkMode} />
         <Characters />
       </header>
     </div>
