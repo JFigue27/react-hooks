@@ -13,8 +13,10 @@ import {
 import InfoIcon from "@material-ui/icons/Info";
 import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { act } from "react-dom/test-utils";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,9 +41,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// InitiaState
+const initialState = {
+  favorites: [],
+};
+
+// Actions
+const favoriteRender = (state, action) => {
+  //
+  switch (action.type) {
+    case "ADD_TO_FAVORITE":
+      return {
+        ...state,
+        favorites: [...state.favorites, action.payload],
+      };
+      break;
+
+    default:
+      return state;
+      break;
+  }
+};
+
 const Characters = () => {
   const classes = useStyles();
   const [characters, setCharacters] = useState([]);
+  const [favorites, dispatch] = useReducer(favoriteRender, initialState);
 
   useEffect(() => {
     fetch("https://rickandmortyapi.com/api/character")
@@ -49,8 +74,25 @@ const Characters = () => {
       .then((data) => setCharacters(data.results));
   }, []);
 
+  const handleFavorites = (favorite) => {
+    dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
+  };
+
   return (
     <Container maxWidth="lg">
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="flex-start"
+        spacing={2}
+      >
+        {favorites.favorites.map((fav) => (
+          <Grid item xs={2}>
+            {fav.name}
+          </Grid>
+        ))}
+      </Grid>
       <Grid
         container
         direction="row"
@@ -84,6 +126,13 @@ const Characters = () => {
                 <Typography variant="body2" color="textSecondary" component="p">
                   {char.name}
                 </Typography>
+                <IconButton
+                  color="primary"
+                  aria-label="add to favorites cart"
+                  onClick={() => handleFavorites(char)}
+                >
+                  <AddShoppingCartIcon />
+                </IconButton>
               </CardContent>
             </Card>
           </Grid>
