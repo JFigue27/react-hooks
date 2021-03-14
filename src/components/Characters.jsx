@@ -13,7 +13,7 @@ import {
 import InfoIcon from "@material-ui/icons/Info";
 import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { act } from "react-dom/test-utils";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -66,6 +66,7 @@ const favoriteRender = (state, action) => {
 const Characters = () => {
   const classes = useStyles();
   const [characters, setCharacters] = useState([]);
+  const [search, setSearch] = useState("");
   const [favorites, dispatch] = useReducer(favoriteRender, initialState);
 
   useEffect(() => {
@@ -78,8 +79,34 @@ const Characters = () => {
     dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
   };
 
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  // const filteredUsers = characters.filter((user) => {
+  //   return user.name.toLowerCase().includes(search.toLowerCase());
+  // });
+
+  const filteredUsers = useMemo(
+    () =>
+      characters.filter((user) => {
+        return user.name.toLowerCase().includes(search.toLowerCase());
+      }),
+    [characters, search]
+  );
   return (
     <Container maxWidth="lg">
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="flex-start"
+        spacing={2}
+      >
+        <Grid item>
+          <input type="text" value={search} onChange={handleSearch} />
+        </Grid>
+      </Grid>
       <Grid
         container
         direction="row"
@@ -100,7 +127,7 @@ const Characters = () => {
         alignItems="flex-start"
         spacing={2}
       >
-        {characters.map((char) => (
+        {filteredUsers.map((char) => (
           <Grid item xs={3}>
             <Card className={classes.root}>
               <CardHeader
