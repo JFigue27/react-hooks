@@ -13,7 +13,7 @@ import {
 import InfoIcon from "@material-ui/icons/Info";
 import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import React, { useState, useEffect, useReducer, useMemo } from "react";
+import React, { useState, useEffect, useReducer, useMemo, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { act } from "react-dom/test-utils";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -68,6 +68,7 @@ const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const [search, setSearch] = useState("");
   const [favorites, dispatch] = useReducer(favoriteRender, initialState);
+  const searchInput = useRef(null);
 
   useEffect(() => {
     fetch("https://rickandmortyapi.com/api/character")
@@ -78,9 +79,13 @@ const Characters = () => {
   const handleFavorites = (favorite) => {
     dispatch({ type: "ADD_TO_FAVORITE", payload: favorite });
   };
+  // Antes de useRef
+  // const handleSearch = (event) => {
+  //   setSearch(event.target.value);
+  // };
 
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
+  const handleSearch = () => {
+    setSearch(searchInput.current.value);
   };
 
   // const filteredUsers = characters.filter((user) => {
@@ -104,7 +109,12 @@ const Characters = () => {
         spacing={2}
       >
         <Grid item>
-          <input type="text" value={search} onChange={handleSearch} />
+          <input
+            type="text"
+            value={search}
+            ref={searchInput}
+            onChange={handleSearch}
+          />
         </Grid>
       </Grid>
       <Grid
