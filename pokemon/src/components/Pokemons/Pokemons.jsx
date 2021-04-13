@@ -1,9 +1,21 @@
 import React, { useState } from "react";
+import Pokemon from "../Pokemon/Pokemon";
 import Search from "../Search/Search";
+import "./pokemons.css";
 
 const Pokemons = () => {
   const [search, setSearch] = useState("");
   const pokemonList = [
+    { name: "Jose", lastName: "Figueroa" },
+    { name: "Maria", lastName: "Barrios" },
+    { name: "Elizabeth", lastName: "Gonzalez" },
+    { name: "Abraham", lastName: "Ortiz" },
+    { name: "Sara", lastName: "Figueroa" },
+    { name: "Jose", lastName: "Figueroa" },
+    { name: "Maria", lastName: "Barrios" },
+    { name: "Elizabeth", lastName: "Gonzalez" },
+    { name: "Abraham", lastName: "Ortiz" },
+    { name: "Sara", lastName: "Figueroa" },
     { name: "Jose", lastName: "Figueroa" },
     { name: "Maria", lastName: "Barrios" },
     { name: "Elizabeth", lastName: "Gonzalez" },
@@ -27,11 +39,13 @@ const Pokemons = () => {
       <h1>List of Pokemones</h1>
       <Search value={search} onChange={handleSearch} />
       {/* <input type="text" value={search} onChange={handleSearch} /> */}
-      {filterPokemon.map((item) => (
-        <h1>
-          {item.name} - {item.lastName}
-        </h1>
-      ))}
+      <div className="flex-container">
+        {filterPokemon.map((item) => (
+          <div>
+            <Pokemon name={item.name} lastName={item.lastName} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
