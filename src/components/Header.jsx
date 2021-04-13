@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Button } from "@material-ui/core";
 import ThemeContext from "../context/ThemeContext";
 
@@ -17,7 +17,7 @@ const Header = (props) => {
         {darkMode ? "Dark Mode" : "Light Mode"}
       </button>
       <br /> */}
-     
+
       <Button variant="contained" color={color} onClick={props.onClick}>
         {props.darkmode ? "Dark Mode" : "Light Mode"}
       </Button>

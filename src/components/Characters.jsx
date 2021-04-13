@@ -2,21 +2,25 @@ import {
   Container,
   Grid,
   IconButton,
-  Paper,
   Card,
   CardMedia,
   CardContent,
   Typography,
   CardHeader,
-  Avatar,
 } from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
 import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import React, { useState, useEffect, useReducer, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { act } from "react-dom/test-utils";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import Search from "./Search";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,11 +59,9 @@ const favoriteRender = (state, action) => {
         ...state,
         favorites: [...state.favorites, action.payload],
       };
-      break;
 
     default:
       return state;
-      break;
   }
 };
 
@@ -84,9 +86,13 @@ const Characters = () => {
   //   setSearch(event.target.value);
   // };
 
-  const handleSearch = () => {
+  // const handleSearch = () => {
+  //   setSearch(searchInput.current.value);
+  // };
+
+  const handleSearch = useCallback(() => {
     setSearch(searchInput.current.value);
-  };
+  }, []);
 
   // const filteredUsers = characters.filter((user) => {
   //   return user.name.toLowerCase().includes(search.toLowerCase());
@@ -109,12 +115,17 @@ const Characters = () => {
         spacing={2}
       >
         <Grid item>
-          <input
+          <Search
+            search={search}
+            searchInput={searchInput}
+            handleSearch={handleSearch}
+          />
+          {/* <input
             type="text"
             value={search}
             ref={searchInput}
             onChange={handleSearch}
-          />
+          /> */}
         </Grid>
       </Grid>
       <Grid
@@ -139,7 +150,7 @@ const Characters = () => {
       >
         {filteredUsers.map((char) => (
           <Grid item xs={3}>
-            <Card className={classes.root}>
+            <Card className={classes.root} key={char.id}>
               <CardHeader
                 // avatar={
                 //   <Avatar aria-label="recipe" className={classes.avatar}>
